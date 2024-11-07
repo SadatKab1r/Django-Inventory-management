@@ -19,7 +19,9 @@
 	<div class="row">
 		<div class="col-md-10 col-12 mx-auto mt-5">
 			<div class="d-flex justify-content-end">
-				<a href="{% url 'add-item' %}" class="btn btn-primary">+</a>
+				{% if user.userprofile.role == 'Admin' %}
+					<a href="{% url 'add-item' %}" class="btn btn-primary">+</a>
+				{% endif %}
 			</div>
 
 			<table class="table table-hover table-striped">
@@ -49,13 +51,16 @@
 					<tr>
 						<th scope="row">{{ item.id }}</th>
 						<td>{{ item.name }}</td>
-						
 					    <td>{{ item.quantity }}</td>
-				
-						
-						<td>{{ item.category.name }}</td>
-						<td><a href="{% url 'edit-item' item.id %}" class="btn btn-outline-secondery">Edit</a></td>
-					    <td><a href="{% url 'delete-item' item.id %}" class="btn btn-secondary">Delete</a></td>
+					    <td>{{ item.category.name }}</td>
+
+						{% if user.userprofile.role == 'Admin' %}
+							<td><a href="{% url 'edit-item' pk=item.pk %}" class="btn btn-outline-secondary">Edit</a></td>
+							<td><a href="{% url 'delete-item' pk=item.pk %}" class="btn btn-secondary">Delete</a></td>
+						{% else %}
+							<td></td>
+							<td></td>
+						{% endif %}
 					</tr>
 					{% endfor %}
 				</tbody>
